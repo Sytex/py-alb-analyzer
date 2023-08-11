@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "py-alb-analyzer"
+version = "0.1.0"
+description = "Analyze ALB logs"
+authors = ["Juan Alvarez <juan@sytex.io>"]
+readme = "README.md"
+packages = [{include = "py_alb_analyzer"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[tool.poetry.group.development.dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
