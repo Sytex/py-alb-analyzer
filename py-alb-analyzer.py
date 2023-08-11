@@ -36,11 +36,6 @@ def main():
         for line in sys.stdin:
             log_entry = parse_log_entry(line)
 
-            if filter_field and str(getattr(log_entry, filter_field)) != filter_value:
-                continue
-
-            writer.writerow(asdict(log_entry))
-
             line_count += 1
             elapsed_time = time.time() - start_time
             lines_per_second = line_count / elapsed_time
@@ -52,6 +47,13 @@ def main():
                     file=sys.stderr,
                     flush=True,
                 )
+
+            if filter_field and str(getattr(log_entry, filter_field)) != filter_value:
+                continue
+
+            writer.writerow(asdict(log_entry))
+
+
 
         print(
             f"\nTotal lines processed: {line_count} in {elapsed_time:.2f} seconds",
