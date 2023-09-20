@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from py_alb_analyzer.log_entry import LogEntry
 
@@ -20,7 +21,8 @@ def parse_log_entry(log_entry_line: str) -> LogEntry:
     try:
         log_entry = LogEntry(
             type=parts[0],
-            time=parts[1],
+            # Fromat is 2023-09-18T23:55:00.399201Z convert to datetime
+            time=datetime.strptime(parts[1], "%Y-%m-%dT%H:%M:%S.%fZ"),
             elb=parts[2],
             client_address=client_address,
             client_port=client_port,

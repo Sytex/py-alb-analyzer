@@ -1,11 +1,12 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
 
 @dataclass
 class LogEntry:
     type: str
-    time: str
+    time: datetime
     elb: str
     client_address: str
     client_port: str
