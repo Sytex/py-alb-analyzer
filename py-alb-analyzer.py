@@ -13,6 +13,7 @@ def main():
     # Argument parsing
     parser = argparse.ArgumentParser(description="Process ALB logs.")
     parser.add_argument("--filter", type=str, help="Filter logs based on field=value")
+    parser.add_argument("--contains", type=str, help="Filter logs where field contains value (format: field=value)")
     # Time from
     parser.add_argument(
         "--from", type=str, dest="from_time", help="Filter logs from this time"
@@ -25,6 +26,8 @@ def main():
 
     filter_field = None
     filter_value = None
+    contains_field = None
+    contains_value = None
     from_time = None
     to_time = None
 
@@ -33,6 +36,13 @@ def main():
         if filter_field not in LogEntry.__annotations__.keys():
             print(
                 f"Invalid filter field '{filter_field}', valid fields are {LogEntry.__annotations__.keys()}"
+            )
+            sys.exit(1)
+    if args.contains:
+        contains_field, contains_value = args.contains.split("=")
+        if contains_field not in LogEntry.__annotations__.keys():
+            print(
+                f"Invalid contains field '{contains_field}', valid fields are {LogEntry.__annotations__.keys()}"
             )
             sys.exit(1)
     if args.from_time:
@@ -68,6 +78,8 @@ def main():
             if to_time and log_entry.time > to_time:
                 continue
             if filter_field and not str(getattr(log_entry, filter_field)).startswith(filter_value):
+                continue
+            if contains_field and contains_value not in str(getattr(log_entry, contains_field)):
                 continue
 
             writer.writerow(asdict(log_entry))
